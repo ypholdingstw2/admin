@@ -2,832 +2,538 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>家庭庫存管理 | 手機版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="揚沛投資控股 - ERP企業資源規劃系統">
+    <title>揚沛投資控股 | ERP系統</title>
     <style>
-        /* 全域重置 - 確保所有元素邊框正確 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: #f8f9fc;
-            padding: 12px;
-            /* 確保安全區域 */
-            padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif, 'Microsoft JhengHei';
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
-        /* 主容器 - 永遠佔滿寬度，無水平溢出 */
-        .inventory-app {
-            width: 100%;
-            max-width: 100%;
-            background: white;
-            border-radius: 28px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        /* 頁頭 */
-        .app-header {
-            padding: 20px 20px 12px 20px;
-            border-bottom: 1px solid #eef2f8;
-        }
-
-        .title-section h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #1e3c5c;
-            letter-spacing: -0.3px;
-        }
-
-        .title-section p {
-            font-size: 0.85rem;
-            color: #6c7f8f;
-            margin-top: 4px;
-        }
-
-        /* 統計卡片 - 手機上兩列並排 */
-        .stats-row {
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
-            gap: 12px;
-            margin: 16px 0 8px;
-            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-details {
+            display: none;
+        }
+
+        .user-details .name {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .user-details .role {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-section {
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h2 {
+            font-size: 1.875rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .welcome-section p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Module Grid */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .module-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--secondary-color);
+        }
+
+        .module-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            background-color: var(--bg-color);
+        }
+
+        .module-card:nth-child(1) .module-icon { background-color: #dbeafe; color: #1e40af; }
+        .module-card:nth-child(2) .module-icon { background-color: #dcfce7; color: #166534; }
+        .module-card:nth-child(3) .module-icon { background-color: #fef3c7; color: #92400e; }
+        .module-card:nth-child(4) .module-icon { background-color: #fee2e2; color: #991b1b; }
+        .module-card:nth-child(5) .module-icon { background-color: #e0e7ff; color: #3730a3; }
+        .module-card:nth-child(6) .module-icon { background-color: #f3e8ff; color: #6b21a8; }
+        .module-card:nth-child(7) .module-icon { background-color: #cffafe; color: #0e7490; }
+        .module-card:nth-child(8) .module-icon { background-color: #f1f5f9; color: #475569; }
+
+        .module-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .module-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .module-arrow {
+            float: right;
+            color: var(--secondary-color);
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .module-card:hover .module-arrow {
+            transform: translateX(4px);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 3rem;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .user-details {
+                display: none;
+            }
+
+            .main-content {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .welcome-section h2 {
+                font-size: 1.5rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .module-card {
+                padding: 1.25rem;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .modules-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Quick Stats (Optional) */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .stat-card {
-            flex: 1;
-            background: #f8fafd;
-            border-radius: 20px;
-            padding: 12px;
-            border: 1px solid #eef2f8;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .stat-icon {
-            font-size: 28px;
-        }
-
-        .stat-info h3 {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #5a6e84;
-            letter-spacing: 0.3px;
-            margin-bottom: 4px;
-        }
-
-        .stat-number {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #1e4663;
-            line-height: 1.1;
-        }
-
-        /* 新增表單 - 手機垂直排列，佔滿寬度 */
-        .add-item-form {
-            margin: 16px 20px;
-            padding: 16px;
-            background: #fafcff;
-            border-radius: 24px;
-            border: 1px solid #eef2f8;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .form-group {
-            width: 100%;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #4a627a;
-            margin-bottom: 6px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 14px;
-            border-radius: 16px;
-            border: 1px solid #dce5ed;
-            background: white;
-            font-size: 0.95rem;
-            font-family: inherit;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .add-btn {
-            background: #1f6e43;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            margin-top: 4px;
-        }
-
-        /* 操作欄位 - 手機上垂直排列 */
-        .action-bar {
-            margin: 0 20px 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .search-box {
-            position: relative;
-            width: 100%;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px 12px 42px;
-            border-radius: 40px;
-            border: 1px solid #dce5ed;
-            background: white;
-            font-size: 0.9rem;
-            font-family: inherit;
-            -webkit-appearance: none;
-        }
-
-        .search-box::before {
-            content: "🔍";
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 16px;
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .filter-badge {
-            flex: 1;
-            text-align: center;
-            background: #eff2f7;
-            padding: 8px 12px;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            color: #3a5a7a;
-            transition: all 0.2s;
-        }
-
-        .filter-badge.active {
-            background: #1e4a76;
-            color: white;
-        }
-
-        /* 庫存列表 - 改為卡片式佈局，完美適應手機 */
-        .items-list {
-            margin: 0 16px 20px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .item-card {
-            background: white;
-            border: 1px solid #eef2f8;
-            border-radius: 20px;
-            padding: 14px;
-            transition: all 0.1s;
-        }
-
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .item-name {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #1f3a54;
-            word-break: break-word;
-            flex: 1;
-        }
-
-        .item-category {
-            background: #eef3fc;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            color: #2c6b9e;
-            font-weight: 500;
-            white-space: nowrap;
-            margin-left: 8px;
-        }
-
-        .item-details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #f8fafc;
-            padding: 4px 8px;
-            border-radius: 40px;
-        }
-
-        .qty-btn {
-            background: white;
-            border: 1px solid #dce5ed;
-            width: 36px;
-            height: 36px;
-            border-radius: 40px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: #2c4c6e;
-            transition: all 0.1s;
-        }
-
-        .qty-btn:active {
-            background: #eef2f8;
-            transform: scale(0.95);
-        }
-
-        .quantity-value {
-            font-size: 1rem;
-            font-weight: 600;
-            min-width: 50px;
+            padding: 1.25rem;
+            border-radius: 8px;
             text-align: center;
         }
 
-        .low-stock-badge {
-            background: #fff1e6;
-            color: #c2410c;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            font-weight: 600;
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
         }
 
-        .item-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-            border-top: 1px solid #f0f4f9;
-            padding-top: 12px;
-            margin-top: 4px;
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
         }
 
-        .edit-btn, .delete-btn {
-            background: none;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.1s;
-            flex: 1;
-            text-align: center;
-        }
-
-        .edit-btn {
-            background: #eef2ff;
-            color: #1e4a76;
-        }
-
-        .delete-btn {
-            background: #feece8;
-            color: #b91c1c;
-        }
-
-        .empty-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: #8da0b5;
-            font-style: italic;
-        }
-
-        /* 模態框 - 手機友善 */
-        .modal-mask {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            visibility: hidden;
-            opacity: 0;
-            transition: 0.2s;
-            padding: 20px;
-        }
-
-        .modal-mask.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .modal-container {
-            background: white;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 32px;
-            padding: 24px;
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-container h3 {
-            font-size: 1.3rem;
-            margin-bottom: 16px;
-            color: #1e3c5c;
-        }
-
-        .modal-container input {
-            width: 100%;
-            padding: 12px 14px;
-            margin: 8px 0;
-            border: 1px solid #dce5ed;
-            border-radius: 16px;
-            font-size: 0.95rem;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 40px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .save-modal {
-            background: #1e4a76;
-            color: white;
-        }
-
-        .cancel-modal {
-            background: #eef2f6;
-            color: #4a627a;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #8da0b5;
-            padding: 16px 20px;
-            border-top: 1px solid #eef2f8;
-        }
-
-        /* 確保觸控區域足夠大 */
-        button, .filter-badge {
-            touch-action: manipulation;
-        }
-
-        /* 移除表格樣式，全部卡片式 */
-        table {
-            display: none;
+        @media (max-width: 768px) {
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <div id="app"></div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">揚</div>
+                <div class="logo-text">
+                    <h1>揚沛投資控股</h1>
+                    <p>ERP企業資源規劃系統</p>
+                </div>
+            </div>
+            <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+            <div class="user-info">
+                <div class="user-details">
+                    <div class="name">Andrew Chao</div>
+                    <div class="role">系統管理員</div>
+                </div>
+                <div class="user-avatar">AC</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h2>歡迎使用 ERP 系統</h2>
+            <p>選擇下方模組開始使用各項功能</p>
+        </section>
+
+        <!-- Quick Stats (Optional - Can be removed) -->
+        <section class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-value">24</div>
+                <div class="stat-label">在管專案</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">156</div>
+                <div class="stat-label">員工數</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">98.5%</div>
+                <div class="stat-label">合規率</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">NT$ 2.4B</div>
+                <div class="stat-label">管理資產</div>
+            </div>
+        </section>
+
+        <!-- Modules Grid -->
+        <section class="modules-grid">
+            <!-- Module 1: 人事管理 -->
+            <a href="#hr-management" class="module-card" data-module="hr">
+                <div class="module-icon">👥</div>
+                <div class="module-title">人事管理</div>
+                <div class="module-description">
+                    員工資料、組織架構、薪資計算、考勤管理、績效評估
+                </div>
+                <span class="module-arrow">→</span>
+            </a>
+
+            <!-- Module 2: 財務管理 -->
+            <a href="#finance-management" class="module-card" data-module="finance">
+                <div class="module-icon">💰</div>
+                <div class="module-title">財務管理</div>
+                <div class="module-description">
+                    會計帳務、預算控管、資金調度、財務報表、稅務申報
+                </div>
+                <span class="module-arrow">→</span>
+            </a>
+
+            <!-- Module 3: 投資管理 -->
+            <a href="#investment-management" class="module-card" data-module="investment">
+                <div class="module-icon">📈</div>
+                <div class="module-title">投資管理</div>
+                <div class="module-description">
+                    投資組合、交易執行、績效追蹤、風險評估、資產配置
+                </div>
+                <span class="module-arrow">→</span>
+            </a>
+
+            <!-- Module 4: 風險管理 -->
+            <a href="#risk-management" class="module-card" data-module="risk">
+                <div class="module-icon">⚠️</div>
+                <div class="module-title">風險管理</div>
+                <div class="module-description">
+                    風險監控、合規檢查、內控稽核、預警系統、報告生成
+                </div>
+                <span class="module-arrow">→</span>
+            </a>
+
+            <!-- Module 5: 客戶關係 -->
+            <a href="#crm-management" class="module-card" data-module="crm">
+                <div class="module-icon">🤝</div>
+                <div class="module-title">客戶關係管理</div>
+                <div class="module-description">
+                    客戶資料、互動記錄、服務追蹤、滿意度調查、商機管理
+                </div>
+                <span class="module-arrow">→</span>
+            </a>
+
+            <!-- Module 6: 合規管理 -->
+            <a href="#compliance-management" class="module-card" data-module="compliance">
+                <div class="module-icon">📋</div>
+                <div class="module-title">合規管理</div>
+                <div class="module-description">
+                    法規遵循、政策管理、申報作業、文件歸檔、審計軌跡
+                </div>
+                <span class="module-arrow">→</span>
+            </a>
+
+            <!-- Module 7: 報表分析 -->
+            <a href="#analytics-reporting" class="module-card" data-module="analytics">
+                <div class="module-icon">📊</div>
+                <div class="module-title">報表與分析</div>
+                <div class="module-description">
+                    數據視覺化、自訂報表、趨勢分析、KPI監控、決策支援
+                </div>
+                <span class="module-arrow">→</span>
+            </a>
+
+            <!-- Module 8: 系統管理 -->
+            <a href="#system-admin" class="module-card" data-module="system">
+                <div class="module-icon">⚙️</div>
+                <div class="module-title">系統管理</div>
+                <div class="module-description">
+                    使用者權限、系統設定、日誌管理、資料備份、API整合
+                </div>
+                <span class="module-arrow">→</span>
+            </a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 揚沛投資控股股份有限公司 | ERP系統版本 1.0.0</p>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem;">最後更新：<span id="lastUpdate"></span></p>
+    </footer>
 
     <script>
-        // ============================================================
-        // 家庭庫存管理系統 - 手機優化版
-        // 完全響應式設計，卡片式列表，完美適配手機寬度
-        // ============================================================
-        
-        const STORAGE_KEY = 'family_inventory_mobile';
-        
-        // 預設範例資料
-        const DEFAULT_ITEMS = [
-            { id: '1', name: '白米', category: '糧食', quantity: 12, unit: 'kg', lowStockThreshold: 3 },
-            { id: '2', name: '醬油', category: '調味料', quantity: 2, unit: '瓶', lowStockThreshold: 1 },
-            { id: '3', name: '雞蛋', category: '蛋奶', quantity: 6, unit: '盒', lowStockThreshold: 2 },
-            { id: '4', name: '洗手乳', category: '清潔', quantity: 1, unit: '罐', lowStockThreshold: 1 },
-            { id: '5', name: '衛生紙', category: '日用品', quantity: 8, unit: '包', lowStockThreshold: 3 },
-            { id: '6', name: '鮮奶', category: '食品', quantity: 2, unit: '瓶', lowStockThreshold: 1 }
-        ];
-        
-        let inventoryItems = [];
-        let currentFilter = 'all';      // 'all' 或 'lowStock'
-        let searchKeyword = '';
-        let editingItemId = null;
-        let modalElement = null;
-        
-        // 輔助函數
-        function generateId() {
-            return Date.now().toString(36) + Math.random().toString(36).substring(2, 8);
+        // Set last update time
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleString('zh-TW');
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const modulesGrid = document.querySelector('.modules-grid');
+            modulesGrid.classList.toggle('mobile-menu-open');
         }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-        
-        function saveToLocal() {
-            try {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(inventoryItems));
-            } catch(e) {}
-        }
-        
-        function loadFromLocal() {
-            try {
-                const stored = localStorage.getItem(STORAGE_KEY);
-                if (stored) {
-                    const parsed = JSON.parse(stored);
-                    if (Array.isArray(parsed)) {
-                        inventoryItems = parsed.map(item => ({
-                            ...item,
-                            lowStockThreshold: item.lowStockThreshold ?? 2,
-                            unit: item.unit || '個',
-                            quantity: typeof item.quantity === 'number' ? item.quantity : 0
-                        }));
-                        return;
-                    }
-                }
-            } catch(e) {}
-            inventoryItems = DEFAULT_ITEMS.map(item => ({ ...item }));
-            saveToLocal();
-        }
-        
-        // 業務邏輯
-        function addItem(name, category, quantity, unit) {
-            const trimmedName = name?.trim();
-            if (!trimmedName) {
-                alert('請填寫物品名稱');
-                return false;
-            }
-            const newItem = {
-                id: generateId(),
-                name: trimmedName,
-                category: category?.trim() || '其他',
-                quantity: Math.max(0, Number(quantity) || 0),
-                unit: unit?.trim() || '個',
-                lowStockThreshold: 2
-            };
-            inventoryItems.unshift(newItem);
-            saveToLocal();
-            renderApp();
-            return true;
-        }
-        
-        function updateItem(itemId, updates) {
-            const index = inventoryItems.findIndex(i => i.id === itemId);
-            if (index !== -1) {
-                inventoryItems[index] = { ...inventoryItems[index], ...updates };
-                inventoryItems[index].quantity = Math.max(0, Number(inventoryItems[index].quantity) || 0);
-                saveToLocal();
-                renderApp();
-            }
-            closeModal();
-        }
-        
-        function deleteItem(itemId) {
-            if (confirm('確定刪除此物品？')) {
-                inventoryItems = inventoryItems.filter(i => i.id !== itemId);
-                saveToLocal();
-                renderApp();
-            }
-        }
-        
-        function adjustQuantity(itemId, delta) {
-            const item = inventoryItems.find(i => i.id === itemId);
-            if (item) {
-                let newQty = (item.quantity || 0) + delta;
-                if (newQty < 0) newQty = 0;
-                item.quantity = newQty;
-                saveToLocal();
-                renderApp();
-            }
-        }
-        
-        function getFilteredItems() {
-            let filtered = [...inventoryItems];
-            if (currentFilter === 'lowStock') {
-                filtered = filtered.filter(item => item.quantity <= item.lowStockThreshold);
-            }
-            if (searchKeyword?.trim()) {
-                const kw = searchKeyword.trim().toLowerCase();
-                filtered = filtered.filter(item => 
-                    item.name.toLowerCase().includes(kw) || 
-                    item.category.toLowerCase().includes(kw)
-                );
-            }
-            return filtered;
-        }
-        
-        function getStats() {
-            const total = inventoryItems.length;
-            const lowCount = inventoryItems.filter(i => i.quantity <= i.lowStockThreshold).length;
-            return { total, lowCount };
-        }
-        
-        // Modal 控制
-        function openEditModal(item) {
-            editingItemId = item.id;
-            if (!modalElement) return;
-            const nameInp = document.getElementById('modalItemName');
-            const catInp = document.getElementById('modalItemCategory');
-            const qtyInp = document.getElementById('modalItemQuantity');
-            const unitInp = document.getElementById('modalItemUnit');
-            if (nameInp) nameInp.value = item.name;
-            if (catInp) catInp.value = item.category;
-            if (qtyInp) qtyInp.value = item.quantity;
-            if (unitInp) unitInp.value = item.unit;
-            modalElement.classList.add('active');
-        }
-        
-        function closeModal() {
-            if (modalElement) modalElement.classList.remove('active');
-            editingItemId = null;
-        }
-        
-        function handleSaveEdit() {
-            if (!editingItemId) return;
-            const nameInp = document.getElementById('modalItemName');
-            const catInp = document.getElementById('modalItemCategory');
-            const qtyInp = document.getElementById('modalItemQuantity');
-            const unitInp = document.getElementById('modalItemUnit');
-            const newName = nameInp?.value.trim();
-            const newCat = catInp?.value.trim();
-            const newQty = parseInt(qtyInp?.value, 10);
-            const newUnit = unitInp?.value.trim();
-            if (!newName) {
-                alert('物品名稱不能為空');
-                return;
-            }
-            if (isNaN(newQty)) {
-                alert('請輸入有效數量');
-                return;
-            }
-            updateItem(editingItemId, {
-                name: newName,
-                category: newCat || '其他',
-                quantity: newQty,
-                unit: newUnit || '個'
-            });
-        }
-        
-        // 渲染應用 - 完全卡片式，適合手機
-        function renderApp() {
-            const appRoot = document.getElementById('app');
-            if (!appRoot) return;
-            
-            const stats = getStats();
-            const filtered = getFilteredItems();
-            
-            let itemsHtml = '';
-            if (filtered.length === 0) {
-                itemsHtml = '<div class="empty-message">✨ 沒有符合的物品，新增一筆吧 ✨</div>';
-            } else {
-                itemsHtml = filtered.map(item => {
-                    const isLow = item.quantity <= item.lowStockThreshold;
-                    return `
-                        <div class="item-card" data-id="${item.id}">
-                            <div class="item-header">
-                                <span class="item-name">${escapeHtml(item.name)}</span>
-                                <span class="item-category">${escapeHtml(item.category)}</span>
-                            </div>
-                            <div class="item-details">
-                                <div class="quantity-controls">
-                                    <button class="qty-btn" data-id="${item.id}" data-delta="-1" aria-label="減少">−</button>
-                                    <span class="quantity-value">${item.quantity} ${escapeHtml(item.unit)}</span>
-                                    <button class="qty-btn" data-id="${item.id}" data-delta="1" aria-label="增加">+</button>
-                                </div>
-                                ${isLow ? '<span class="low-stock-badge">⚠️ 庫存偏低</span>' : ''}
-                            </div>
-                            <div class="item-actions">
-                                <button class="edit-btn" data-id="${item.id}">✏️ 編輯</button>
-                                <button class="delete-btn" data-id="${item.id}">🗑️ 刪除</button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-            
-            const mainHtml = `
-                <div class="inventory-app">
-                    <div class="app-header">
-                        <div class="title-section">
-                            <h1>🏠 家庭庫存</h1>
-                            <p>手機隨手記・庫存不煩惱</p>
-                        </div>
-                        <div class="stats-row">
-                            <div class="stat-card">
-                                <div class="stat-icon">📦</div>
-                                <div class="stat-info">
-                                    <h3>總品項</h3>
-                                    <div class="stat-number">${stats.total}</div>
-                                </div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-icon">⚠️</div>
-                                <div class="stat-info">
-                                    <h3>低庫存</h3>
-                                    <div class="stat-number">${stats.lowCount}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="add-item-form">
-                        <div class="form-group">
-                            <label>物品名稱 *</label>
-                            <input type="text" id="newItemName" placeholder="例：鮮奶" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label>分類</label>
-                            <input type="text" id="newItemCategory" placeholder="食品 / 日用品" autocomplete="off">
-                        </div>
-                        <div class="form-group">
-                            <label>數量</label>
-                            <input type="number" id="newItemQuantity" placeholder="數量" value="1" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label>單位</label>
-                            <input type="text" id="newItemUnit" placeholder="個/瓶/包" autocomplete="off">
-                        </div>
-                        <button class="add-btn" id="addItemBtn">+ 新增物品</button>
-                    </div>
-                    
-                    <div class="action-bar">
-                        <div class="search-box">
-                            <input type="text" id="searchInput" placeholder="搜尋名稱或分類" value="${escapeHtml(searchKeyword)}" autocomplete="off">
-                        </div>
-                        <div class="filter-group">
-                            <span class="filter-badge ${currentFilter === 'all' ? 'active' : ''}" data-filter="all">📋 全部</span>
-                            <span class="filter-badge ${currentFilter === 'lowStock' ? 'active' : ''}" data-filter="lowStock">⚠️ 低庫存</span>
-                        </div>
-                    </div>
-                    
-                    <div class="items-list">
-                        ${itemsHtml}
-                    </div>
-                    
-                    <footer>💡 點擊 +/- 快速調整數量 | 資料自動儲存</footer>
-                </div>
+
+        // Module click handler - For API integration
+        document.querySelectorAll('.module-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const moduleName = this.getAttribute('data-module');
+                const moduleHref = this.getAttribute('href');
                 
-                <div id="editModal" class="modal-mask">
-                    <div class="modal-container">
-                        <h3>✏️ 編輯物品</h3>
-                        <input type="text" id="modalItemName" placeholder="物品名稱" autocomplete="off">
-                        <input type="text" id="modalItemCategory" placeholder="分類" autocomplete="off">
-                        <input type="number" id="modalItemQuantity" placeholder="數量" step="1">
-                        <input type="text" id="modalItemUnit" placeholder="單位" autocomplete="off">
-                        <div class="modal-buttons">
-                            <button class="cancel-modal" id="closeModalBtn">取消</button>
-                            <button class="save-modal" id="saveModalBtn">儲存</button>
-                        </div>
-                    </div>
-                </div>
-            `;
+                // Log for debugging
+                console.log(`Module clicked: ${moduleName}`);
+                console.log(`Target: ${moduleHref}`);
+                
+                // TODO: Integrate with backend API
+                // Example: 
+                // fetch(`/api/module/${moduleName}/access`, {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ timestamp: new Date() })
+                // })
+                
+                // For now, just show alert (will be removed after API integration)
+                // e.preventDefault();
+                // alert(`即將進入 ${this.querySelector('.module-title').textContent} 模組`);
+            });
+        });
+
+        // Responsive detection
+        function detectDevice() {
+            const isMobile = window.innerWidth <= 768;
+            const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
+            const isDesktop = window.innerWidth > 1024;
             
-            appRoot.innerHTML = mainHtml;
+            console.log(`Device type: ${isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'}`);
+            console.log(`Screen width: ${window.innerWidth}px`);
             
-            // 重新取得 modal 元素
-            modalElement = document.getElementById('editModal');
-            
-            // 綁定事件
-            attachEvents();
+            return { isMobile, isTablet, isDesktop };
         }
-        
-        function attachEvents() {
-            // 新增物品
-            const addBtn = document.getElementById('addItemBtn');
-            if (addBtn) {
-                addBtn.addEventListener('click', () => {
-                    const name = document.getElementById('newItemName')?.value || '';
-                    const category = document.getElementById('newItemCategory')?.value || '';
-                    const quantity = parseInt(document.getElementById('newItemQuantity')?.value, 10) || 0;
-                    const unit = document.getElementById('newItemUnit')?.value || '';
-                    if (addItem(name, category, quantity, unit)) {
-                        // 清空名稱，方便連續新增
-                        const nameInput = document.getElementById('newItemName');
-                        if (nameInput) nameInput.value = '';
-                        const qtyInput = document.getElementById('newItemQuantity');
-                        if (qtyInput) qtyInput.value = '1';
-                    }
-                });
+
+        // Initial detection
+        detectDevice();
+
+        // Listen for resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                detectDevice();
+            }, 250);
+        });
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // For now, prevent default as these are placeholders
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                console.log(`Navigation to: ${targetId} - Awaiting backend integration`);
+            });
+        });
+
+        // Add keyboard navigation support
+        document.addEventListener('keydown', (e) => {
+            // Number keys 1-8 to access modules
+            if (e.key >= '1' && e.key <= '8') {
+                const index = parseInt(e.key) - 1;
+                const modules = document.querySelectorAll('.module-card');
+                if (modules[index]) {
+                    modules[index].focus();
+                    modules[index].click();
+                }
             }
-            
-            // 搜尋
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', (e) => {
-                    searchKeyword = e.target.value;
-                    renderApp();
-                });
-            }
-            
-            // 過濾按鈕
-            const filterBadges = document.querySelectorAll('.filter-badge');
-            filterBadges.forEach(badge => {
-                badge.addEventListener('click', () => {
-                    const filterVal = badge.getAttribute('data-filter');
-                    if (filterVal === 'all') currentFilter = 'all';
-                    else if (filterVal === 'lowStock') currentFilter = 'lowStock';
-                    renderApp();
-                });
-            });
-            
-            // 數量增減
-            const qtyBtns = document.querySelectorAll('.qty-btn');
-            qtyBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const id = btn.getAttribute('data-id');
-                    const delta = parseInt(btn.getAttribute('data-delta'), 10);
-                    if (id && !isNaN(delta)) adjustQuantity(id, delta);
-                });
-            });
-            
-            // 編輯
-            const editBtns = document.querySelectorAll('.edit-btn');
-            editBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = btn.getAttribute('data-id');
-                    const item = inventoryItems.find(i => i.id === id);
-                    if (item) openEditModal(item);
-                });
-            });
-            
-            // 刪除
-            const deleteBtns = document.querySelectorAll('.delete-btn');
-            deleteBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = btn.getAttribute('data-id');
-                    if (id) deleteItem(id);
-                });
-            });
-            
-            // Modal 事件
-            if (modalElement) {
-                const closeModalBtn = document.getElementById('closeModalBtn');
-                const saveModalBtn = document.getElementById('saveModalBtn');
-                if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-                if (saveModalBtn) saveModalBtn.addEventListener('click', handleSaveEdit);
-                modalElement.addEventListener('click', (e) => {
-                    if (e.target === modalElement) closeModal();
-                });
-            }
-        }
-        
-        // 初始化
-        function init() {
-            loadFromLocal();
-            renderApp();
-        }
-        
-        init();
+        });
     </script>
 </body>
 </html>
