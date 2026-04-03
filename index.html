@@ -635,7 +635,21 @@
 
     <script>
         // 全域變數
-        const API_BASE_URL = 'http://114.34.157.56:5508/api'; // 替換為您的後端API地址
+        const API_BASE_URL = 'https://114.34.157.56:5508/api'; // 替換為您的後端API地址
+        //const API_BASE_URL = 'https://admin.ypascent.com.tw:5508/api'; // 替換為您的後端API地址
+        // 測試後端是否連線（頁面開啟時自動測試）
+        window.onload = function() {
+            fetch(API_BASE_URL + "/health")
+            .then(res => res.json())
+            .then(data => {
+                console.log("✅ 連線成功：", data);
+                alert("後端連線成功！可以登入了！");
+            })
+            .catch(err => {
+                console.error("❌ 連線失敗：", err);
+                alert("後端連線失敗！");
+            });
+        };
         let currentUser = null;
 
         // 頁面加載完成初始化
