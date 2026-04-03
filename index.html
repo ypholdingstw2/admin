@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="揚沛投資控股 - ERP企業資源規劃系統">
     <title>揚沛投資控股 | ERP系統</title>
-    <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-        <style>
+    <style>
+        /* 原有樣式保留不動 */
         * {
             margin: 0;
             padding: 0;
@@ -28,6 +28,8 @@
             --border-color: #e2e8f0;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --error-color: #ef4444;
+            --success-color: #10b981;
         }
 
         body {
@@ -37,7 +39,7 @@
             line-height: 1.6;
         }
 
-        /* Header Styles */
+        /* 原有 Header、Main Content 樣式保留不動 */
         .header {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
@@ -116,7 +118,6 @@
             opacity: 0.8;
         }
 
-        /* Main Content */
         .main-content {
             max-width: 1400px;
             margin: 2rem auto;
@@ -138,7 +139,6 @@
             font-size: 1rem;
         }
 
-        /* Module Grid */
         .modules-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -210,7 +210,6 @@
             transform: translateX(4px);
         }
 
-        /* Footer */
         .footer {
             background-color: var(--card-bg);
             border-top: 1px solid var(--border-color);
@@ -221,7 +220,6 @@
             margin-top: 3rem;
         }
 
-        /* Mobile Menu Toggle */
         .menu-toggle {
             display: none;
             background: none;
@@ -231,7 +229,6 @@
             cursor: pointer;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .header-content {
                 padding: 0;
@@ -270,7 +267,6 @@
             }
         }
 
-        /* Loading State */
         .loading {
             display: inline-block;
             width: 20px;
@@ -285,7 +281,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Quick Stats (Optional) */
         .quick-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -317,183 +312,546 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        /* 新增登入頁面樣式 */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header .logo-icon {
+            margin: 0 auto 1rem;
+        }
+
+        .login-header h2 {
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-error {
+            color: var(--error-color);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .form-input.error {
+            border-color: var(--error-color);
+        }
+
+        .form-input.error + .form-error {
+            display: block;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .login-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .login-button .loading {
+            width: 16px;
+            height: 16px;
+            border-width: 2px;
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+
+        .login-message {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .login-message.error {
+            display: block;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .login-message.success {
+            display: block;
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .logout-button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 0.875rem;
+            opacity: 0.9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.5rem;
+            }
+
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* 隱藏/顯示元素 */
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
+    <!-- 登入頁面 (預設顯示) -->
+    <div id="login-page" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
                 <div class="logo-icon">揚</div>
-                <div class="logo-text">
-                    <h1>揚沛投資控股</h1>
-                    <p>ERP企業資源規劃系統</p>
-                </div>
+                <h2>揚沛投資控股 ERP 系統</h2>
+                <p>請輸入您的帳號密碼進行登入</p>
             </div>
-            <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
-            <div class="user-info">
-                <div class="user-details">
-                    <div class="name">Andrew Chao</div>
-                    <div class="role">系統管理員</div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="username">帳號</label>
+                    <input type="text" id="username" class="form-input" placeholder="請輸入帳號" required>
+                    <div class="form-error" id="username-error">請輸入有效的帳號</div>
                 </div>
-                <div class="user-avatar">AC</div>
-            </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">密碼</label>
+                    <input type="password" id="password" class="form-input" placeholder="請輸入密碼" required>
+                    <div class="form-error" id="password-error">請輸入密碼</div>
+                </div>
+                <button type="submit" id="login-btn" class="login-button">
+                    登入系統
+                </button>
+                <div id="login-message" class="login-message"></div>
+            </form>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Welcome Section -->
-        <section class="welcome-section">
-            <h2>歡迎使用 ERP 系統</h2>
-            <p>選擇下方模組開始使用各項功能</p>
-        </section>
-
-        <!-- Quick Stats (Optional - Can be removed) -->
-        <section class="quick-stats">
-            <div class="stat-card">
-                <div class="stat-value">24</div>
-                <div class="stat-label">在管專案</div>
+    <!-- ERP 主頁面 (預設隱藏) -->
+    <div id="erp-main" class="hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">揚</div>
+                    <div class="logo-text">
+                        <h1>揚沛投資控股</h1>
+                        <p>ERP企業資源規劃系統</p>
+                    </div>
+                </div>
+                <button class="menu-toggle" onclick="toggleMobileMenu()">☰</button>
+                <div class="user-info">
+                    <div class="user-details">
+                        <div class="name" id="user-name">Andrew Chao</div>
+                        <div class="role" id="user-role">系統管理員</div>
+                    </div>
+                    <div class="user-avatar" id="user-avatar">AC</div>
+                    <button class="logout-button" onclick="logout()">登出</button>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value">156</div>
-                <div class="stat-label">員工數</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">98.5%</div>
-                <div class="stat-label">合規率</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">NT$ 2.4B</div>
-                <div class="stat-label">管理資產</div>
-            </div>
-        </section>
+        </header>
 
-        <!-- Modules Grid -->
-        <section class="modules-grid">
-            <!-- Module 1: 人事管理 -->
-            <a href="#hr-management" class="module-card" data-module="hr">
-                <div class="module-icon">👥</div>
-                <div class="module-title">人事管理</div>
-                <div class="module-description">
-                    員工資料、組織架構、薪資計算、考勤管理、績效評估
+        <!-- Main Content -->
+        <main class="main-content">
+            <section class="welcome-section">
+                <h2>歡迎使用 ERP 系統，<span id="welcome-username">Andrew</span>！</h2>
+                <p>選擇下方模組開始使用各項功能</p>
+            </section>
+
+            <section class="quick-stats">
+                <div class="stat-card">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">在管專案</div>
                 </div>
-                <span class="module-arrow">→</span>
-            </a>
-
-            <!-- Module 2: 財務管理 -->
-            <a href="#finance-management" class="module-card" data-module="finance">
-                <div class="module-icon">💰</div>
-                <div class="module-title">財務管理</div>
-                <div class="module-description">
-                    會計帳務、預算控管、資金調度、財務報表、稅務申報
+                <div class="stat-card">
+                    <div class="stat-value">156</div>
+                    <div class="stat-label">員工數</div>
                 </div>
-                <span class="module-arrow">→</span>
-            </a>
-
-            <!-- Module 3: 投資管理 -->
-            <a href="#investment-management" class="module-card" data-module="investment">
-                <div class="module-icon">📈</div>
-                <div class="module-title">投資管理</div>
-                <div class="module-description">
-                    投資組合、交易執行、績效追蹤、風險評估、資產配置
+                <div class="stat-card">
+                    <div class="stat-value">98.5%</div>
+                    <div class="stat-label">合規率</div>
                 </div>
-                <span class="module-arrow">→</span>
-            </a>
-
-            <!-- Module 4: 風險管理 -->
-            <a href="#risk-management" class="module-card" data-module="risk">
-                <div class="module-icon">⚠️</div>
-                <div class="module-title">風險管理</div>
-                <div class="module-description">
-                    風險監控、合規檢查、內控稽核、預警系統、報告生成
+                <div class="stat-card">
+                    <div class="stat-value">NT$ 2.4B</div>
+                    <div class="stat-label">管理資產</div>
                 </div>
-                <span class="module-arrow">→</span>
-            </a>
+            </section>
 
-            <!-- Module 5: 客戶關係 -->
-            <a href="#crm-management" class="module-card" data-module="crm">
-                <div class="module-icon">🤝</div>
-                <div class="module-title">客戶關係管理</div>
-                <div class="module-description">
-                    客戶資料、互動記錄、服務追蹤、滿意度調查、商機管理
-                </div>
-                <span class="module-arrow">→</span>
-            </a>
+            <section class="modules-grid">
+                <a href="#hr-management" class="module-card" data-module="hr">
+                    <div class="module-icon">👥</div>
+                    <div class="module-title">人事管理</div>
+                    <div class="module-description">
+                        員工資料、組織架構、薪資計算、考勤管理、績效評估
+                    </div>
+                    <span class="module-arrow">→</span>
+                </a>
+                <a href="#finance-management" class="module-card" data-module="finance">
+                    <div class="module-icon">💰</div>
+                    <div class="module-title">財務管理</div>
+                    <div class="module-description">
+                        會計帳務、預算控管、資金調度、財務報表、稅務申報
+                    </div>
+                    <span class="module-arrow">→</span>
+                </a>
+                <a href="#investment-management" class="module-card" data-module="investment">
+                    <div class="module-icon">📈</div>
+                    <div class="module-title">投資管理</div>
+                    <div class="module-description">
+                        投資組合、交易執行、績效追蹤、風險評估、資產配置
+                    </div>
+                    <span class="module-arrow">→</span>
+                </a>
+                <a href="#risk-management" class="module-card" data-module="risk">
+                    <div class="module-icon">⚠️</div>
+                    <div class="module-title">風險管理</div>
+                    <div class="module-description">
+                        風險監控、合規檢查、內控稽核、預警系統、報告生成
+                    </div>
+                    <span class="module-arrow">→</span>
+                </a>
+                <a href="#crm-management" class="module-card" data-module="crm">
+                    <div class="module-icon">🤝</div>
+                    <div class="module-title">客戶關係管理</div>
+                    <div class="module-description">
+                        客戶資料、互動記錄、服務追蹤、滿意度調查、商機管理
+                    </div>
+                    <span class="module-arrow">→</span>
+                </a>
+                <a href="#compliance-management" class="module-card" data-module="compliance">
+                    <div class="module-icon">📋</div>
+                    <div class="module-title">合規管理</div>
+                    <div class="module-description">
+                        法規遵循、政策管理、申報作業、文件歸檔、審計軌跡
+                    </div>
+                    <span class="module-arrow">→</span>
+                </a>
+                <a href="#analytics-reporting" class="module-card" data-module="analytics">
+                    <div class="module-icon">📊</div>
+                    <div class="module-title">報表與分析</div>
+                    <div class="module-description">
+                        數據視覺化、自訂報表、趨勢分析、KPI監控、決策支援
+                    </div>
+                    <span class="module-arrow">→</span>
+                </a>
+                <a href="#system-admin" class="module-card" data-module="system">
+                    <div class="module-icon">⚙️</div>
+                    <div class="module-title">系統管理</div>
+                    <div class="module-description">
+                        使用者權限、系統設定、日誌管理、資料備份、API整合
+                    </div>
+                    <span class="module-arrow">→</span>
+                </a>
+            </section>
+        </main>
 
-            <!-- Module 6: 合規管理 -->
-            <a href="#compliance-management" class="module-card" data-module="compliance">
-                <div class="module-icon">📋</div>
-                <div class="module-title">合規管理</div>
-                <div class="module-description">
-                    法規遵循、政策管理、申報作業、文件歸檔、審計軌跡
-                </div>
-                <span class="module-arrow">→</span>
-            </a>
-
-            <!-- Module 7: 報表分析 -->
-            <a href="#analytics-reporting" class="module-card" data-module="analytics">
-                <div class="module-icon">📊</div>
-                <div class="module-title">報表與分析</div>
-                <div class="module-description">
-                    數據視覺化、自訂報表、趨勢分析、KPI監控、決策支援
-                </div>
-                <span class="module-arrow">→</span>
-            </a>
-
-            <!-- Module 8: 系統管理 -->
-            <a href="#system-admin" class="module-card" data-module="system">
-                <div class="module-icon">⚙️</div>
-                <div class="module-title">系統管理</div>
-                <div class="module-description">
-                    使用者權限、系統設定、日誌管理、資料備份、API整合
-                </div>
-                <span class="module-arrow">→</span>
-            </a>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2026 揚沛投資控股股份有限公司 | ERP系統版本 1.0.0</p>
-        <p style="margin-top: 0.5rem; font-size: 0.75rem;">最後更新：<span id="lastUpdate"></span></p>
-    </footer>
+        <footer class="footer">
+            <p>&copy; 2026 揚沛投資控股股份有限公司 | ERP系統版本 1.0.0</p>
+            <p style="margin-top: 0.5rem; font-size: 0.75rem;">最後更新：<span id="lastUpdate"></span></p>
+        </footer>
+    </div>
 
     <script>
-        // Set last update time
-        document.getElementById('lastUpdate').textContent = new Date().toLocaleString('zh-TW');
+        // 全域變數
+        const API_BASE_URL = 'http://114.34.157.56:5508/api'; // 替換為您的後端API地址
+        let currentUser = null;
 
-        // Mobile menu toggle
+        // 頁面加載完成初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 檢查是否已有登入狀態 (從localStorage)
+            const savedToken = localStorage.getItem('erp_token');
+            const savedUser = localStorage.getItem('erp_user');
+            
+            if (savedToken && savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showMainPage();
+                initMainPage();
+            } else {
+                showLoginPage();
+            }
+
+            // 綁定登入表單提交事件
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+        });
+
+        // 處理登入請求
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginBtn = document.getElementById('login-btn');
+            const messageEl = document.getElementById('login-message');
+            
+            // 表單驗證
+            let isValid = true;
+            if (!username) {
+                document.getElementById('username').classList.add('error');
+                document.getElementById('username-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('username').classList.remove('error');
+                document.getElementById('username-error').style.display = 'none';
+            }
+            
+            if (!password) {
+                document.getElementById('password').classList.add('error');
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('password').classList.remove('error');
+                document.getElementById('password-error').style.display = 'none';
+            }
+            
+            if (!isValid) return;
+            
+            // 顯示加載狀態
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<span class="loading"></span> 登入中...';
+            messageEl.className = 'login-message';
+            messageEl.textContent = '';
+            
+            try {
+                // 呼叫後端登入API
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.message || '登入失敗，請檢查帳號密碼');
+                }
+                
+                // 登入成功處理
+                currentUser = result.user;
+                // 儲存token和使用者資訊
+                localStorage.setItem('erp_token', result.token);
+                localStorage.setItem('erp_user', JSON.stringify(result.user));
+                
+                // 顯示成功訊息並跳轉
+                messageEl.className = 'login-message success';
+                messageEl.textContent = '登入成功，正在進入系統...';
+                
+                setTimeout(() => {
+                    showMainPage();
+                    initMainPage();
+                }, 1000);
+                
+            } catch (error) {
+                // 顯示錯誤訊息
+                messageEl.className = 'login-message error';
+                messageEl.textContent = error.message;
+                
+                // 恢復按鈕狀態
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '登入系統';
+            }
+        }
+
+        // 顯示登入頁面
+        function showLoginPage() {
+            document.getElementById('login-page').classList.remove('hidden');
+            document.getElementById('erp-main').classList.add('hidden');
+        }
+
+        // 顯示主頁面
+        function showMainPage() {
+            document.getElementById('login-page').classList.add('hidden');
+            document.getElementById('erp-main').classList.remove('hidden');
+        }
+
+        // 初始化主頁面
+        function initMainPage() {
+            // 更新使用者資訊
+            if (currentUser) {
+                document.getElementById('user-name').textContent = currentUser.name || '使用者';
+                document.getElementById('user-role').textContent = currentUser.role || '使用者';
+                document.getElementById('user-avatar').textContent = getAvatarText(currentUser.name || '');
+                document.getElementById('welcome-username').textContent = currentUser.name || '使用者';
+            }
+            
+            // 設置最後更新時間
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString('zh-TW');
+            
+            // 原有主頁面邏輯
+            initModuleHandlers();
+            detectDevice();
+            initSmoothScrolling();
+            initKeyboardNavigation();
+        }
+
+        // 登出功能
+        function logout() {
+            if (confirm('確定要登出系統嗎？')) {
+                // 呼叫登出API (可選)
+                fetch(`${API_BASE_URL}/auth/logout`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('erp_token')}`
+                    }
+                }).catch(err => console.log('登出API呼叫失敗:', err));
+                
+                // 清除儲存的資訊
+                localStorage.removeItem('erp_token');
+                localStorage.removeItem('erp_user');
+                currentUser = null;
+                
+                // 返回登入頁
+                showLoginPage();
+                // 清空表單
+                document.getElementById('login-form').reset();
+            }
+        }
+
+        // 輔助函數：取得使用者頭像文字 (姓名縮寫)
+        function getAvatarText(name) {
+            if (!name) return 'U';
+            const nameParts = name.split(' ');
+            if (nameParts.length > 1) {
+                return nameParts[0][0] + nameParts[1][0];
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        // 原有主頁面功能函數
         function toggleMobileMenu() {
             const modulesGrid = document.querySelector('.modules-grid');
             modulesGrid.classList.toggle('mobile-menu-open');
         }
 
-        // Module click handler - For API integration
-        document.querySelectorAll('.module-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                const moduleName = this.getAttribute('data-module');
-                const moduleHref = this.getAttribute('href');
-                
-                // Log for debugging
-                console.log(`Module clicked: ${moduleName}`);
-                console.log(`Target: ${moduleHref}`);
-                
-                // TODO: Integrate with backend API
-                // Example: 
-                // fetch(`/api/module/${moduleName}/access`, {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ timestamp: new Date() })
-                // })
-                
-                // For now, just show alert (will be removed after API integration)
-                // e.preventDefault();
-                // alert(`即將進入 ${this.querySelector('.module-title').textContent} 模組`);
+        function initModuleHandlers() {
+            document.querySelectorAll('.module-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    const moduleName = this.getAttribute('data-module');
+                    const moduleHref = this.getAttribute('href');
+                    
+                    console.log(`Module clicked: ${moduleName}`);
+                    console.log(`Target: ${moduleHref}`);
+                    
+                    // 驗證使用者權限 (呼叫API檢查)
+                    checkModulePermission(moduleName);
+                    
+                    // TODO: 實際導航邏輯
+                    e.preventDefault();
+                });
             });
-        });
+        }
 
-        // Responsive detection
+        // 檢查模組存取權限
+        async function checkModulePermission(moduleName) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/check-permission`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('erp_token')}`
+                    },
+                    body: JSON.stringify({
+                        module: moduleName,
+                        userId: currentUser.id
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (!result.hasPermission) {
+                    alert(`您沒有存取${moduleName}模組的權限，請聯繫系統管理員`);
+                }
+            } catch (error) {
+                console.error('權限檢查失敗:', error);
+            }
+        }
+
         function detectDevice() {
             const isMobile = window.innerWidth <= 768;
             const isTablet = window.innerWidth > 768 && window.innerWidth <= 1024;
@@ -505,40 +863,28 @@
             return { isMobile, isTablet, isDesktop };
         }
 
-        // Initial detection
-        detectDevice();
-
-        // Listen for resize
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                detectDevice();
-            }, 250);
-        });
-
-        // Add smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                // For now, prevent default as these are placeholders
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                console.log(`Navigation to: ${targetId} - Awaiting backend integration`);
+        function initSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    console.log(`Navigation to: ${targetId} - Awaiting backend integration`);
+                });
             });
-        });
+        }
 
-        // Add keyboard navigation support
-        document.addEventListener('keydown', (e) => {
-            // Number keys 1-8 to access modules
-            if (e.key >= '1' && e.key <= '8') {
-                const index = parseInt(e.key) - 1;
-                const modules = document.querySelectorAll('.module-card');
-                if (modules[index]) {
-                    modules[index].focus();
-                    modules[index].click();
+        function initKeyboardNavigation() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key >= '1' && e.key <= '8') {
+                    const index = parseInt(e.key) - 1;
+                    const modules = document.querySelectorAll('.module-card');
+                    if (modules[index]) {
+                        modules[index].focus();
+                        modules[index].click();
+                    }
                 }
-            }
-        });
+            });
+        }
     </script>
 </body>
 </html>
